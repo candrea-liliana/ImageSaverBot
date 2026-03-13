@@ -10,7 +10,8 @@ import hashlib
 # ===== CONFIG =====
 
 SEARCH_TERMS      = os.environ.get("SEARCH_TERMS", "pizza,cats,nature").split(",")
-IMAGES_PER_SEARCH = int(os.environ.get("IMAGES_PER_SEARCH", "10"))
+raw = os.environ.get("IMAGES_PER_SEARCH", "").strip()
+IMAGES_PER_SEARCH = int(raw) if raw.isdigit() else 10
 OUTPUT_DIR        = os.environ.get("OUTPUT_DIR", "scraped_images")
 
 HEADERS = {
