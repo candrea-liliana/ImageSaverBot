@@ -1,0 +1,37 @@
+name: Image Scraper Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:      # Github interface manual run
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 pillow
+
+      - name: Run the bot
+        env:
+          SEARCH_TERMS: ${{ vars.SEARCH_TERMS }}
+          IMAGES_PER_SEARCH: ${{ vars.IMAGES_PER_SEARCH }}
+        run: python main.py
+
+      - name: Saved images
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraped-images-${{ github.run_number }}
+          path: scraped_images/
+          retention-days: 30
+          if-no-files-found: warn

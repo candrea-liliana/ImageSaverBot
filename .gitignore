@@ -1,1 +1,5 @@
-
+.env
+*.json
+scraped_images/
+__pycache__/
+.venv/
